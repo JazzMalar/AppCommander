@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace BioBS.Common.TemplateSelectors
+namespace AppCommander.Common.TemplateSelectors
 {
     public class PersonAreaTemplateSelector : DataTemplateSelector
     {

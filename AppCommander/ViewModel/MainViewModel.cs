@@ -20,8 +20,8 @@ namespace AppCommander.ViewModel
 
         #region ObservableCollections
 
-        private readonly ObservableCollection<App> _appList = new ObservableCollection<App>();
-        public ObservableCollection<App> AppList
+        private readonly ObservableCollection<Appl> _appList = new ObservableCollection<Appl>();
+        public ObservableCollection<Appl> AppList
         {
             get { return _appList; }
         }
@@ -67,8 +67,8 @@ namespace AppCommander.ViewModel
         {
             get
             {
-                if (_setApp != null) return _setApp;
-                return new RelayCommand<int>(SetApp); 
+                if (_setApp == null) _setApp = new RelayCommand<int>(SetApp);
+                return _setApp; 
             }
         }
 
@@ -77,8 +77,8 @@ namespace AppCommander.ViewModel
         {
             get
             {
-                if (_removeApp != null) return _removeApp;
-                return new RelayCommand<int>(RemoveApp);
+                if (_removeApp == null) _removeApp = new RelayCommand<int>(RemoveApp);  
+                return _removeApp;
             }
         }
 
@@ -87,8 +87,8 @@ namespace AppCommander.ViewModel
         {
             get
             {
-                if (_save != null) return _save;
-                return new RelayCommand<bool>(Save);
+                if (_save == null) _save = new RelayCommand<bool>(Save);
+                return _save;
             }
         }
 
@@ -97,8 +97,8 @@ namespace AppCommander.ViewModel
         {
             get
             {
-                if (_load != null) return _load;
-                return new RelayCommand<bool>(Load);
+                if (_load == null) _load = new RelayCommand<bool>(Load);
+                return _load;    
             }
         }
 
@@ -107,8 +107,8 @@ namespace AppCommander.ViewModel
         {
             get
             {
-                if (_rate != null) return _rate;
-                return new RelayCommand<int>(Rate);
+                if (_rate == null) _rate = new RelayCommand<int>(Rate); 
+                return _rate;
             }
         }
 
@@ -153,6 +153,8 @@ namespace AppCommander.ViewModel
             IsMainViewActive = true;
 
             Data = new ModelHelper();
+
+            AppList.Add(new Appl() { Name = "Test App", Ranking = 4 } );
 
         }
     }

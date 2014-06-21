@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCommander", "AppCommander\AppCommander.csproj", "{F502CACC-D4BE-4899-86C7-6D84FF58F9E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BioBS", "..\BioBS\BioBS\BioBS.csproj", "{C1532955-4B3A-4C53-B298-F3666DEECAF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F502CACC-D4BE-4899-86C7-6D84FF58F9E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F502CACC-D4BE-4899-86C7-6D84FF58F9E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F502CACC-D4BE-4899-86C7-6D84FF58F9E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1532955-4B3A-4C53-B298-F3666DEECAF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1532955-4B3A-4C53-B298-F3666DEECAF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1532955-4B3A-4C53-B298-F3666DEECAF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1532955-4B3A-4C53-B298-F3666DEECAF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
