@@ -53,6 +53,15 @@ namespace AppCommander.ViewModel
                 if (_isMainViewActive != value)
                 {
                     _isMainViewActive = value;
+                    
+                    // Sort this guy everytime the Mainview get's displayed
+                    // TODO: What happens when we have a lot of Apps?
+                    List<Appl> tmp = AppList.ToList<Appl>();
+                    tmp.Sort();
+                    
+                    AppList.Clear();
+                    tmp.ForEach(a => AppList.Add(a));
+
                     OnPropertyChanged();
                 }
             }
@@ -181,7 +190,12 @@ namespace AppCommander.ViewModel
 
         private void RemoveApp(Appl appl)
         {
-            AppList.Remove(appl); 
+            AppList.Remove(appl);
+            //TODO: Should we really save everytime an app gets changed? 
+            Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
+
+            IsEditViewActive = false;
+            IsMainViewActive = true; 
         }
 
         private void Save(bool placeholder)

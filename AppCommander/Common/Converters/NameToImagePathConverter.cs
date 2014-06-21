@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace AppCommander.Common.Converters
 {
@@ -14,9 +15,11 @@ namespace AppCommander.Common.Converters
             if (value != null && value is string)
             {
                 string imageName = value as string;
-                string imagePrefix = "pack://application:,,,/PictureLibrary;component/Resources/";
+                if (imageName.EndsWith("jpg",true, System.Globalization.CultureInfo.CurrentCulture) || imageName.EndsWith("jpeg", true, System.Globalization.CultureInfo.CurrentCulture))
+                {
+                    return new BitmapImage(new Uri(imageName)); 
+                }
 
-                return string.Format("{0}{1}", imagePrefix, imageName);
             }
 
             return null;
