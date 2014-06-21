@@ -1,8 +1,123 @@
 ﻿<Window x:Class="AppCommander.MainWindow"
+        DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="BioBS" Height="880" Width="1280" ResizeMode="CanMinimize">
+    <Grid x:Name="MainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         
+        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+            </Border.Effect>
+            <StackPanel x:Name="MainContent">
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsMainViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListView
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Center"
+                    ItemsSource="{Binding AppList}"
+                    ItemTemplate="{StaticResource AppItemTemplate}"
+                    Height="420"
+                    x:Name="AppList"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.Style>
+                            <Style TargetType="ItemsControl">
+                                <Style.Triggers>
+                                    <Trigger Property="HasItems" Value="false">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <TextBlock Text="no entries" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ItemsControl.Style>
+                    </ListView>
+                </StackPanel>
+
+                <StackPanel Orientation="Vertical" Visibility="{Binding IsEditViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <StackPanel x:Name="CurrentCustomerDetails">
+                        <TextBlock Text="Bestellübersicht" FontWeight="Bold" FontSize="24" />
+                    </StackPanel>
+                    <StackPanel x:Name="OrderOverview" Orientation="Vertical" Margin="0 10 0 30">
+                        <StackPanel Orientation="Horizontal" Margin="2 2 2 2">
+                            <TextBlock Text="Gesamtbetrag: " Style="{StaticResource DefaultTextBlockStyle}" Width="100" />
+                            <TextBlock Text="{Binding CurrentOrder.TotalAmount}" Style="{StaticResource DefaultTextBlockStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2 2 2 2">
+                            <TextBlock Text="Bestellstatus: " Style="{StaticResource DefaultTextBlockStyle}" Width="100" />
+                            <ComboBox x:Name="StatusBox" SelectedIndex="0">
+                                <ComboBoxItem Content="in Arbeit" />
+                                <ComboBoxItem Content="abgeschlossen" />
+                            </ComboBox>
+                            <!--<TextBox Text="{Binding CurrentOrder.Status}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}" />-->
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2 2 2 2">
+                            <TextBlock Text="Lieferart: " Style="{StaticResource DefaultTextBlockStyle}" Width="100" />
+                            <ComboBox x:Name="DeliveryBox" SelectedIndex="1">
+                                <ComboBoxItem Content="--- Bitte auswählen ---" />
+                                <ComboBoxItem Content="Abholung" />
+                                <ComboBoxItem Content="Lieferung" />
+                            </ComboBox>
+                            <!--<TextBox Text="{Binding CurrentOrder.ProvidesType}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}" />-->
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="2 2 2 2">
+                            <TextBlock Text="Bezahlart: " Style="{StaticResource DefaultTextBlockStyle}" Width="100" />
+                            <ComboBox x:Name="PayBox" SelectedIndex="1">
+                                <ComboBoxItem Content="--- Bitte auswählen ---" />
+                                <ComboBoxItem Content="Bar" />
+                                <ComboBoxItem Content="Karte" />
+                                <ComboBoxItem Content="Rechnung" />
+                            </ComboBox>
+                            <!--<TextBox Text="{Binding CurrentOrder.PaymentType}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}" />-->
+                        </StackPanel>
+                        <!-- TODO: use enum for view -->
+                        <TextBox Text="{Binding CurrentOrder.Remarks}" Height="50" Width="300" Margin="2 2 2 2" />
+                    </StackPanel>
+
+                    <TextBlock Text="Ausgewählte Positionen: " FontSize="14" FontWeight="Bold" />
+
+                    <ItemsControl
+                ItemsSource="{Binding CurrentOrder.PositionList}"
+                ItemTemplate="{StaticResource OrderItemTemplate}">
+                        <!-- TODO: use own template...? -->
+                    </ItemsControl>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Border CornerRadius="5" Background="#dcd9b0" Margin="0 0 0 10">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                            </Border.Effect>
+                            <Button Content="Commit Order" Command="{Binding CommitOrderCommand}" CommandParameter="{Binding IsOrderCommitted}" Style="{StaticResource ButtonDetailsOverviewSideBar}" />
+                        </Border>
+                        <Border CornerRadius="5" Background="#dcd9b0" Margin="5 0 0 10">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                            </Border.Effect>
+                            <Button Content="Cancel" Command="{Binding CancelOrderCommand}" CommandParameter="{Binding IsOrderCommitted}" Style="{StaticResource ButtonDetailsOverviewSideBar}" />
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+
     </Grid>
 </Window>
