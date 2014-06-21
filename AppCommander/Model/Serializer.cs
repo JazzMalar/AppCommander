@@ -14,18 +14,29 @@ namespace AppCommander.Model
         {
 
             XmlSerializer ser = new XmlSerializer(typeof(T));
-            TextWriter textWriter = new StreamWriter(@"D:\TMP\blah.xml");
+            TextWriter textWriter = new StreamWriter(path);
             ser.Serialize(textWriter, obj);
             textWriter.Close(); 
         }
 
-        public static T DeSerializeFromXML<T>(T obj, string path)
+        public static T DeSerializeFromXML<T>(string path)
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));
-            TextReader textReader = new StreamReader(@"D:\TMP\blah.xml");
+            TextReader textReader = new StreamReader(path);
             T ret = (T)ser.Deserialize(textReader);
             textReader.Close();
             return ret;
+        }
+
+        public static Appl DeSerializeByGUID(string guid, string path)
+        {
+            //TODO: Generic Version ? 
+            XmlSerializer ser = new XmlSerializer(typeof(List<Appl>));
+            TextReader textReader = new StreamReader(path);
+            List<Appl> ret = (List<Appl>)ser.Deserialize(textReader);
+            textReader.Close(); 
+
+            return ret.FirstOrDefault(a => a.GUID == guid);
         }
     }
 }

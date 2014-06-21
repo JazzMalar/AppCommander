@@ -30,6 +30,20 @@ namespace AppCommander.ViewModel
         
         #region Properties
 
+        private Appl _selectedApp;
+        public Appl SelectedApp
+        {
+            get { return _selectedApp; }
+            set
+            {
+                if (_selectedApp != value)
+                {
+                    _selectedApp = value;
+                    OnPropertyChanged(); 
+                }
+            }
+        }
+
         private bool _isMainViewActive;
         public bool IsMainViewActive
         {
@@ -62,23 +76,43 @@ namespace AppCommander.ViewModel
 
         #region Commands
 
-        private RelayCommand<int> _setApp;
-        public RelayCommand<int> CmdSetApp
+        private SimpleCommand _addApp;
+        public SimpleCommand CmdAddApp
         {
             get
             {
-                if (_setApp == null) _setApp = new RelayCommand<int>(SetApp);
+                if (_addApp == null) _addApp = new SimpleCommand(AddApp);
+                return _addApp; 
+            }
+        }
+
+        private RelayCommand<string> _setApp;
+        public RelayCommand<string> CmdSetApp
+        {
+            get
+            {
+                if (_setApp == null) _setApp = new RelayCommand<string>(SetApp);
                 return _setApp; 
             }
         }
 
-        private RelayCommand<int> _removeApp;
-        public RelayCommand<int> CmdRemoveApp
+        private RelayCommand<Appl> _removeApp;
+        public RelayCommand<Appl> CmdRemoveApp
         {
             get
             {
-                if (_removeApp == null) _removeApp = new RelayCommand<int>(RemoveApp);  
+                if (_removeApp == null) _removeApp = new RelayCommand<Appl>(RemoveApp);  
                 return _removeApp;
+            }
+        }
+
+        private RelayCommand<Appl> _saveApp;
+        public RelayCommand<Appl> CmdSaveApp
+        {
+            get
+            {
+                if (_saveApp == null) _saveApp = new RelayCommand<Appl>(SaveApp);
+                return _saveApp;
             }
         }
 
@@ -116,14 +150,38 @@ namespace AppCommander.ViewModel
         #endregion
 
         #region Command Helpers
-        
-        private void SetApp(int ID) {
-            throw new NotImplementedException(); 
+
+        private void AddApp()
+        {
+            SelectedApp = new Appl() { GUID = Guid.NewGuid().ToString() }; 
+            IsMainViewActive = false;
+            IsEditViewActive = true; 
         }
 
-        private void RemoveApp(int ID)
+        private void SaveApp(Appl appl)
         {
-            throw new NotImplementedException(); 
+            AppList.Remove(SelectedApp);
+            AppList.Add(SelectedApp);
+            SelectedApp = null; 
+
+            //TODO: Should we really save everytime an app gets changed? 
+            Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
+
+            IsEditViewActive = false;
+            IsMainViewActive = true; 
+        }
+
+        private void SetApp(string GUID) {
+
+            SelectedApp = Serializer.DeSerializeByGUID(GUID, ConfigWrapper.XMLPath);
+            IsEditViewActive = true;
+            IsMainViewActive = false;
+
+        }
+
+        private void RemoveApp(Appl appl)
+        {
+            AppList.Remove(appl); 
         }
 
         private void Save(bool placeholder)
@@ -154,7 +212,8 @@ namespace AppCommander.ViewModel
 
             Data = new ModelHelper();
 
-            AppList.Add(new Appl() { Name = "Test App", Ranking = 4 } );
+            // Füge alle Einträge aus dem XML in die AppListe ein
+            Serializer.DeSerializeFromXML<List<Appl>>(ConfigWrapper.XMLPath).ForEach(a => AppList.Add(a));
 
         }
     }

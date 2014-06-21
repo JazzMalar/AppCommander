@@ -90,6 +90,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\Commands\SimpleCommand.cs" />
     <Compile Include="Common\Commands\RelayCommand.cs" />
     <Compile Include="Common\Config\ConfigWrapper.cs" />
     <Compile Include="Common\Converters\BooleanToVisibilityConverter.cs" />
