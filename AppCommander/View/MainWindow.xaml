@@ -74,9 +74,9 @@
                                 <TextBlock Text="{Binding Price}" Style="{StaticResource DefaultTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <ListBox ItemsSource="{Binding ValidPlattforms}">
-                                  
-                                </ListBox>
+                                <ToggleButton Grid.Column="0" Tag="android" IsChecked="False" Cursor="Hand" Template="{StaticResource androidTemplate}" />
+                                <ToggleButton Grid.Column="1" Tag="apple" IsChecked="False" Cursor="Hand" Template="{StaticResource appleTemplate}" />
+                                <ToggleButton Grid.Column="2" Tag="windows" IsChecked="False" Cursor="Hand" Template="{StaticResource windowsTemplate}" />
                             </StackPanel>
                         </StackPanel>
                         
