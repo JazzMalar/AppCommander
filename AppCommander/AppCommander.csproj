@@ -96,6 +96,7 @@
     <Compile Include="Common\Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Common\Converters\NameToImagePathConverter.cs" />
     <Compile Include="Common\Converters\RgbToColorBrushConverter.cs" />
+    <Compile Include="Common\Converters\StringToXMLVersionConverter.cs" />
     <Compile Include="Common\Log\Logger.cs" />
     <Compile Include="Common\TemplateSelectors\MainAreaContentTemplateSelector.cs" />
     <Compile Include="Common\TemplateSelectors\PersonAreaTemplateSelector.cs" />

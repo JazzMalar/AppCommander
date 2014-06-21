@@ -66,12 +66,12 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Background="Black">
                             <Image Source="{Binding Picture, Converter={StaticResource NameToImagePathConverter}}" />
-                            <uc:RatingControl Width="100" Height="25" HorizontalAlignment="Left" />
+                            <uc:RatingControl Width="100" Height="25" RatingValue="{Binding Ranking}" HorizontalAlignment="Left" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="CHF: " />
-                                <TextBlock Text="{Binding Price}" />
+                                <TextBlock Text="CHF: " Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="{Binding Price}" Style="{StaticResource DefaultTextBlockStyle}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <ListBox ItemsSource="{Binding ValidPlattforms}">
@@ -82,10 +82,20 @@
                         
                         <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Name}" />
-                                <TextBox Text="{Binding XMLVersion}" />
+                                <TextBox Text="{Binding Name}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}"/>
+                                <TextBox Text="{Binding AppVersion,ValidatesOnExceptions=False, Converter={StaticResource XMLVersionToStringConverter}}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}">
+                                    <Validation.ErrorTemplate>
+                                        <ControlTemplate>
+                                            <StackPanel>
+                                                <!-- Placeholder for the TextBox itself -->
+                                                <AdornedElementPlaceholder x:Name="textBox"/>
+                                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </Validation.ErrorTemplate>
+                                </TextBox>
                             </StackPanel>
-                            <TextBox Text="{Binding Description}" />
+                            <TextBox Text="{Binding Description}"  Height="50" Width="310" Style="{StaticResource DefaultTextBoxStyle}" Template="{StaticResource TextBoxBaseControlTemplate}"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -96,12 +106,12 @@
                                     <RowDefinition Height="25" />
                                     <RowDefinition Height="25" />
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Android" Grid.Column="0" Grid.Row="0" />
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="0" />
-                                <TextBlock Text="Iphone" Grid.Column="0" Grid.Row="1" />
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="1" />
-                                <TextBlock Text="Windows" Grid.Column="0" Grid.Row="2" />
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="2" />
+                                <TextBlock Text="Android" Grid.Column="0" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="Iphone" Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="Windows" Grid.Column="0" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"/>
                             </Grid>
                             
                         </StackPanel>

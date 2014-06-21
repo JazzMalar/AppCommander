@@ -92,46 +92,52 @@ namespace AppCommander.Model
         /// <param name="version">Version.</param>
         public XMLVersion(string version)
         {
-            this.build = -1;
-            this.revision = -1;
-            if (version == null)
-            {
-                throw new ArgumentNullException("version");
-            }
-            char[] chArray1 = new char[1] { '.' };
-            string[] textArray1 = version.Split(chArray1);
-            int num1 = textArray1.Length;
-            if ((num1 < 2) || (num1 > 4))
-            {
-                throw new ArgumentException("Arg_VersionString");
-            }
-            this.major = int.Parse(textArray1[0], CultureInfo.InvariantCulture);
-            if (this.major < 0)
-            {
-                throw new ArgumentOutOfRangeException("version", "ArgumentOutOfRange_Version");
-            }
-            this.minor = int.Parse(textArray1[1], CultureInfo.InvariantCulture);
-            if (this.minor < 0)
-            {
-                throw new ArgumentOutOfRangeException("version", "ArgumentOutOfRange_Version");
-            }
-            num1 -= 2;
-            if (num1 > 0)
-            {
-                this.build = int.Parse(textArray1[2], CultureInfo.InvariantCulture);
-                if (this.build < 0)
+            try { 
+                this.build = -1;
+                this.revision = -1;
+                if (version == null)
                 {
-                    throw new ArgumentOutOfRangeException("build", "ArgumentOutOfRange_Version");
+                    throw new ArgumentNullException("version");
                 }
-                num1--;
+                char[] chArray1 = new char[1] { '.' };
+                string[] textArray1 = version.Split(chArray1);
+                int num1 = textArray1.Length;
+                if ((num1 < 2) || (num1 > 4))
+                {
+                    throw new ArgumentException("Arg_VersionString");
+                }
+                this.major = int.Parse(textArray1[0], CultureInfo.InvariantCulture);
+                if (this.major < 0)
+                {
+                    throw new ArgumentOutOfRangeException("version", "ArgumentOutOfRange_Version");
+                }
+                this.minor = int.Parse(textArray1[1], CultureInfo.InvariantCulture);
+                if (this.minor < 0)
+                {
+                    throw new ArgumentOutOfRangeException("version", "ArgumentOutOfRange_Version");
+                }
+                num1 -= 2;
                 if (num1 > 0)
                 {
-                    this.revision = int.Parse(textArray1[3], CultureInfo.InvariantCulture);
-                    if (this.revision < 0)
+                    this.build = int.Parse(textArray1[2], CultureInfo.InvariantCulture);
+                    if (this.build < 0)
                     {
-                        throw new ArgumentOutOfRangeException("revision", "ArgumentOutOfRange_Version");
+                        throw new ArgumentOutOfRangeException("build", "ArgumentOutOfRange_Version");
+                    }
+                    num1--;
+                    if (num1 > 0)
+                    {
+                        this.revision = int.Parse(textArray1[3], CultureInfo.InvariantCulture);
+                        if (this.revision < 0)
+                        {
+                            throw new ArgumentOutOfRangeException("revision", "ArgumentOutOfRange_Version");
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("lasjdkflasjd");
             }
         }
         /// <summary>
@@ -438,5 +444,6 @@ namespace AppCommander.Model
             }
             throw new ArgumentException(string.Format("ArgumentOutOfRange_Bounds_Lower_Upper {0},{1}", "0", "4"), "fieldCount");
         }
+
     }
 }
