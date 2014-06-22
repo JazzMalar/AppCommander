@@ -145,12 +145,12 @@ namespace AppCommander.ViewModel
             }
         }
 
-        private RelayCommand<int> _rate;
-        public RelayCommand<int> CmdRate
+        private RelayCommand<string> _rate;
+        public RelayCommand<string> CmdRate
         {
             get
             {
-                if (_rate == null) _rate = new RelayCommand<int>(Rate); 
+                if (_rate == null) _rate = new RelayCommand<string>(Rate); 
                 return _rate;
             }
         }
@@ -208,9 +208,10 @@ namespace AppCommander.ViewModel
             throw new NotImplementedException(); 
         }
 
-        private void Rate(int ID)
+        private void Rate(string ranking)
         {
-            throw new NotImplementedException(); 
+            //TODO: Should we really save everytime an app gets changed? 
+            Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
         }
 
         #endregion
@@ -221,13 +222,14 @@ namespace AppCommander.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            IsEditViewActive = false;
-            IsMainViewActive = true;
-
             Data = new ModelHelper();
 
             // Füge alle Einträge aus dem XML in die AppListe ein
             Serializer.DeSerializeFromXML<List<Appl>>(ConfigWrapper.XMLPath).ForEach(a => AppList.Add(a));
+
+            IsEditViewActive = false;
+            IsMainViewActive = true;
+
 
         }
     }
