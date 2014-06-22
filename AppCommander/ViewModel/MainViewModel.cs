@@ -11,6 +11,8 @@ using AppCommander.Common.Config;
 using System.Threading;
 using System.ComponentModel;
 using System.Windows;
+using System.IO;
+using AppCommander.Common.Log;
 
 namespace AppCommander.ViewModel
 {
@@ -230,8 +232,8 @@ namespace AppCommander.ViewModel
 
         private void SaveApp(Appl appl)
         {
-            AppList.Remove(SelectedApp);
-            AppList.Add(SelectedApp);
+            AppList.Remove(appl);
+            AppList.Add(appl);
             SelectedApp = null; 
 
             //TODO: Should we really save everytime an app gets changed? 
@@ -275,7 +277,7 @@ namespace AppCommander.ViewModel
 
         #endregion
 
-        #region methods
+        #region Methods
         private void ChangeView()
         {
             IsEditViewActive = !IsEditViewActive;
@@ -299,6 +301,19 @@ namespace AppCommander.ViewModel
                 loadFrom = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 loadFrom += @"\\apps.xml";
                 ConfigWrapper.XMLPath = loadFrom;
+
+                try
+                {
+                    if (!(File.Exists(loadFrom)))
+                    {
+                        File.Create(loadFrom);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.append(e.ToString(), Logger.ERROR);
+                    throw new ArgumentException("The XML Path is not valid! Please consult the log file (" + ConfigWrapper.LogDirectory + ")");
+                }
 
                 this.Save(); 
             }

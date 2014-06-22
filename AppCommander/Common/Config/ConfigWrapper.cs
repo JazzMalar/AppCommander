@@ -1,6 +1,8 @@
-﻿using System;
+﻿using AppCommander.Common.Log;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,8 +20,9 @@ namespace AppCommander.Common.Config
             }
             set 
             {
+
                 Properties.Settings.Default.XMLPath = value;
-                Properties.Settings.Default.Save(); 
+                Properties.Settings.Default.Save();
             }
         }
 

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RatingControlSample", "C:\U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "C:\Users\Markus\Downloads\RatingControlSample\RatingControlSample\Sandbox\Sandbox.csproj", "{EA7842FA-4D40-44E6-B352-481214E8A708}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppCommanderTest", "AppCommanderTest\AppCommanderTest.csproj", "{323B967C-03BE-4785-B9E0-F67D0B251E27}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{EA7842FA-4D40-44E6-B352-481214E8A708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA7842FA-4D40-44E6-B352-481214E8A708}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA7842FA-4D40-44E6-B352-481214E8A708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{323B967C-03BE-4785-B9E0-F67D0B251E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{323B967C-03BE-4785-B9E0-F67D0B251E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{323B967C-03BE-4785-B9E0-F67D0B251E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{323B967C-03BE-4785-B9E0-F67D0B251E27}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

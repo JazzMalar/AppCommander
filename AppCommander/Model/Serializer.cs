@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-using System.IO; 
+using System.IO;
+using AppCommander.Common.Log;
+using AppCommander.Common.Config; 
 
 namespace AppCommander.Model
 {
-    class Serializer
+    public class Serializer
     {
         public static void SerializeToXML<T>(T obj, string path)
         {
@@ -21,11 +23,18 @@ namespace AppCommander.Model
 
         public static T DeSerializeFromXML<T>(string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(T));
-            TextReader textReader = new StreamReader(path);
-            T ret = (T)ser.Deserialize(textReader);
-            textReader.Close();
-            return ret;
+            try { 
+                XmlSerializer ser = new XmlSerializer(typeof(T));
+                TextReader textReader = new StreamReader(path);
+                T ret = (T)ser.Deserialize(textReader);
+                textReader.Close();
+                return ret;
+            }
+            catch (Exception e)
+            {
+                Logger.append(e.ToString(), Logger.ERROR );
+                throw new ArgumentException("Invalid XML Format!");
+            }
         }
 
         public static Appl DeSerializeByGUID(string guid, string path)
