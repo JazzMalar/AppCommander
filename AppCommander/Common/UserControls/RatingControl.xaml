@@ -11,7 +11,7 @@
                 </Viewbox>
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="star" Property="Fill" Value="White"/>
+                        <Setter TargetName="star" Property="Fill" Value="Gold"/>
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>

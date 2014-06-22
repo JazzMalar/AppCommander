@@ -18,9 +18,18 @@ namespace AppCommander.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
- 
-        public ModelHelper Data;
 
+        /// <summary>
+        /// One single field.
+        /// </summary>
+        #region Fields
+        public ModelHelper Data;
+        #endregion
+
+        /// <summary>
+        /// In this section all the observable collections are stored.
+        /// They are used for Bindings.
+        /// </summary>
         #region ObservableCollections
 
         private readonly ObservableCollection<Appl> _appList = new ObservableCollection<Appl>();
@@ -31,6 +40,11 @@ namespace AppCommander.ViewModel
 
         #endregion
         
+        /// <summary>
+        /// In this section all the Properties are stored.
+        /// They are used as Flags and other stuff that needs
+        /// to be binded directly
+        /// </summary>
         #region Properties
 
         private Appl _selectedApp;
@@ -100,6 +114,10 @@ namespace AppCommander.ViewModel
 
 	    #endregion 
 
+        /// <summary>
+        /// All the Commands (ICommands) are stored in this region.
+        /// They are used to receive Events from the View and the Unit Tests
+        /// </summary>
         #region Commands
 
         private SimpleCommand _exitApplication;
@@ -205,6 +223,9 @@ namespace AppCommander.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// These are the functions that are called by the Commands
+        /// </summary>
         #region Command Helpers
 
         private void ExitApplication()
@@ -277,6 +298,9 @@ namespace AppCommander.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// Only one single helper Method
+        /// </summary>
         #region Methods
         private void ChangeView()
         {
@@ -289,13 +313,19 @@ namespace AppCommander.ViewModel
         #endregion
 
         /// <summary>
-        /// Konstruktor Klasse der MainViewModel
+        /// Constructor of the MainViewModel
+        /// Initializes the whole thing and sets
+        /// some default values
         /// </summary>
         public MainViewModel()
         {
+            // Default Window Name
             Titel = "Eingetragene Apps";
+            
+            // XML Path from Configuration
             string loadFrom = ConfigWrapper.XMLPath; 
 
+            // Handle some special cases with the XMLPath
             if (loadFrom.Equals(String.Empty))
             {
                 loadFrom = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -318,9 +348,10 @@ namespace AppCommander.ViewModel
                 this.Save(); 
             }
 
-            // Füge alle Einträge aus dem XML in die AppListe ein
+            //from the XML, add all Appls to the ApplList
             Serializer.DeSerializeFromXML<List<Appl>>(loadFrom).ForEach(a => AppList.Add(a));
 
+            // show the main screen. Do not show the edit screen.
             IsEditViewActive = false;
             IsMainViewActive = true;
 

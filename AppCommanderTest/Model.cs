@@ -59,7 +59,7 @@ namespace AppCommanderTest
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException), "Invalid XML Format!")]
+        [ExpectedException(typeof(ArgumentException)]
         public void DeserializeCorruptAppList()
         {
             Serializer.SerializeToXML<Appl>(_appl, ConfigWrapper.XMLPath);

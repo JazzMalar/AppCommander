@@ -1,20 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:AppCommander.Common.Converters"
-                    xmlns:selectors="clr-namespace:AppCommander.Common.TemplateSelectors"
                     xmlns:uc="clr-namespace:AppCommander.Common.UserControls"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     
     <!-- key definition to use converters in the styles -->  
     <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    <converters:RgbToColorBrushConverter x:Key="RgbToColorBrushConverter" />
     <converters:NameToImagePathConverter x:Key="NameToImagePathConverter" />
     <converters:XMLVersionToStringConverter x:Key="XMLVersionToStringConverter" />
     
-    <selectors:PersonAreaTemplateSelector x:Key="PersonAreaTemplateSelector" />
-    <selectors:MainAreaContentTemplateSelector x:Key="MainAreaContentTemplateSelector" />
-    <selectors:EditImageTemplateSelector x:Key="EditImageTemplateSelector" />
-
     <!-- Main Grid styling -->
     <Style x:Key="RootStyle" TargetType="Grid">
         <Setter Property="Background" Value="#000000" />
