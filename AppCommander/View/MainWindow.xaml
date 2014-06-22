@@ -4,22 +4,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:uc="clr-namespace:AppCommander.Common.UserControls"
-        Title="App Commander" Height="880" Width="1280" ResizeMode="CanMinimize">
-    <Grid x:Name="MainGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        
-        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
-            </Border.Effect>
-            <StackPanel x:Name="MainContent">
-                <StackPanel Orientation="Vertical" Visibility="{Binding IsMainViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ListView
+        Title="App Commander" Height="800" Width="1280" ResizeMode="CanMinimize">
+    
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding CmdExitApplication}" Key="Escape" />
+        <KeyBinding Command="{Binding CmdSave}" Key="S" Modifiers="Control" />
+    </Window.InputBindings>
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Height="25">
+            <Menu.Items>
+                <MenuItem Header="_Datei">
+                    <MenuItem Header="_Load" Click="openLoadDialog" />
+                    <MenuItem Header="_Save" Command="{Binding CmdSave}" />
+                    <MenuItem Header="_Save As..." Click="openSaveDialog" />
+                    <Separator />
+                    <MenuItem Header="_Exit" Command="{Binding CmdExitApplication}" />
+                </MenuItem>
+            </Menu.Items>
+        </Menu>
+        <Grid x:Name="MainGrid" DockPanel.Dock="Bottom" Style="{StaticResource RootStyle}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                </Border.Effect>
+                <StackPanel x:Name="MainContent" Style="{StaticResource MainContentStyle}">
+                    <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                        </Border.Effect>
+                        <TextBlock FontSize="24" Text="{Binding Titel}" Margin="5 5 5 5"></TextBlock>
+                    </Border>
+                    <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}" Visibility="{Binding IsMainViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                        </Border.Effect>
+                        <StackPanel HorizontalAlignment="Left" Orientation="Vertical" Visibility="{Binding IsMainViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ListView
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="0"
@@ -29,102 +57,128 @@
                     Height="420"
                     x:Name="AppList"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.Style>
-                            <Style TargetType="ItemsControl">
-                                <Style.Triggers>
-                                    <Trigger Property="HasItems" Value="false">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate>
-                                                    <StackPanel Orientation="Vertical">
-                                                        <TextBlock Text="no entries" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                    </StackPanel>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ItemsControl.Style>
-                    </ListView>
-                    <Button Content="+" Command="{Binding CmdAddApp}" />
-                </StackPanel>
-
-                <StackPanel Orientation="Vertical" Visibility="{Binding IsEditViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <Grid x:Name="EditGrid" DataContext="{Binding SelectedApp}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1*" />
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Background="Black">
-                            <Image Source="{Binding Picture, Converter={StaticResource NameToImagePathConverter}}" />
-                            <uc:RatingControl Width="100" Height="25" RatingValue="{Binding Ranking}" HorizontalAlignment="Left" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="CHF: " Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="{Binding Price}" Style="{StaticResource DefaultTextBlockStyle}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal">
-                                <ToggleButton Grid.Column="0" Tag="android" IsChecked="False" Cursor="Hand" Template="{StaticResource androidTemplate}" />
-                                <ToggleButton Grid.Column="1" Tag="apple" IsChecked="False" Cursor="Hand" Template="{StaticResource appleTemplate}" />
-                                <ToggleButton Grid.Column="2" Tag="windows" IsChecked="False" Cursor="Hand" Template="{StaticResource windowsTemplate}" />
-                            </StackPanel>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.Style>
+                                    <Style TargetType="ItemsControl">
+                                        <Style.Triggers>
+                                            <Trigger Property="HasItems" Value="false">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate>
+                                                            <StackPanel Orientation="Vertical">
+                                                                <TextBlock Text="no entries" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                            </StackPanel>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
+                            </ListView>
+                            <Button Content="+" Command="{Binding CmdAddApp}" />
                         </StackPanel>
-                        
-                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBox Text="{Binding Name}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}"/>
-                                <TextBox Text="{Binding AppVersion,ValidatesOnExceptions=False, Converter={StaticResource XMLVersionToStringConverter}}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}">
-                                    <Validation.ErrorTemplate>
-                                        <ControlTemplate>
-                                            <StackPanel>
-                                                <!-- Placeholder for the TextBox itself -->
-                                                <AdornedElementPlaceholder x:Name="textBox"/>
-                                                <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
-                                            </StackPanel>
-                                        </ControlTemplate>
-                                    </Validation.ErrorTemplate>
-                                </TextBox>
-                            </StackPanel>
-                            <TextBox Text="{Binding Description}"  Height="50" Width="310" Style="{StaticResource DefaultTextBoxStyle}" Template="{StaticResource TextBoxBaseControlTemplate}"/>
-                            <Grid>
+                    </Border>
+                    <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyleProduct}" Visibility="{Binding IsEditViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="7" ShadowDepth="2" />
+                        </Border.Effect>
+                        <StackPanel Orientation="Vertical" Visibility="{Binding IsEditViewActive, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid x:Name="EditGrid" DataContext="{Binding SelectedApp}">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="2*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="25" />
-                                    <RowDefinition Height="25" />
-                                    <RowDefinition Height="25" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="Android" Grid.Column="0" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="Iphone" Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="Windows" Grid.Column="0" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                <TextBlock Text="1.0" Grid.Column="1" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"/>
+
+                                <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical" Margin="5 5 5 5" HorizontalAlignment="Left">
+                                    <Button Click="openFileDialog" Background="Transparent" BorderThickness="0">
+                                        <Image Width="250" Height="300" Name="ApplPic">
+                                            <Image.Style>
+                                                <Style TargetType="{x:Type Image}">
+                                                    <Setter Property="Source" Value="{Binding Picture, Converter={StaticResource NameToImagePathConverter}}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Picture}" Value="{x:Null}">
+                                                            <Setter Property="Source" Value="/AppCommander;component/Common/Assets/NoImage.PNG" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Image.Style>
+                                        </Image>
+                                    </Button>
+                                    <uc:RatingControl Width="100" Height="25" RatingValue="{Binding Ranking}" Background="#646464" HorizontalAlignment="Center" />
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                        <TextBlock Text="CHF: " Style="{StaticResource DefaultTextBlockStyle}"/>
+                                        <TextBox Text="{Binding Price}" Style="{StaticResource DefaultTextBoxStyle}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <ToggleButton Grid.Column="0" Tag="android" IsChecked="{Binding IsCompAndroid}" Cursor="Hand" Template="{StaticResource androidTemplate}" />
+                                        <ToggleButton Grid.Column="1" Tag="apple" IsChecked="{Binding IsCompIphone}" Cursor="Hand" Template="{StaticResource appleTemplate}" />
+                                        <ToggleButton Grid.Column="2" Tag="windows" IsChecked="{Binding IsCompWindows}" Cursor="Hand" Template="{StaticResource windowsTemplate}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Vertical">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Text="{Binding Name}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}"/>
+                                        <TextBox Text="{Binding AppVersion,ValidatesOnExceptions=False, Converter={StaticResource XMLVersionToStringConverter}}" Template="{StaticResource TextBoxBaseControlTemplate}" Style="{StaticResource DefaultTextBoxStyle}">
+                                            <Validation.ErrorTemplate>
+                                                <ControlTemplate>
+                                                    <StackPanel>
+                                                        <!-- Placeholder for the TextBox itself -->
+                                                        <AdornedElementPlaceholder x:Name="textBox"/>
+                                                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red"/>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Validation.ErrorTemplate>
+                                        </TextBox>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding Description}"  Height="50" Width="310" Style="{StaticResource DefaultTextBoxStyle}" Template="{StaticResource TextBoxBaseControlTemplate}"/>
+                                    <Grid HorizontalAlignment="Left">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25" />
+                                            <RowDefinition Height="25" />
+                                            <RowDefinition Height="25" />
+                                            <RowDefinition Height="25" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="OS" Grid.Column="0" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}" />
+                                        <TextBlock Text="Minimum Version" Grid.Column="1" Grid.Row="0" Style="{StaticResource DefaultTextBlockStyle}" />
+
+                                        <TextBlock Text="Android" Visibility="{Binding IsCompAndroid, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                        <TextBox Text="{Binding AndroidVersion, Converter={StaticResource XMLVersionToStringConverter}}" Visibility="{Binding IsCompAndroid, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.Row="1" Style="{StaticResource DefaultTextBoxStyle}"/>
+
+                                        <TextBlock Text="IPhone" Visibility="{Binding IsCompIphone, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="0" Grid.Row="2" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                        <TextBox Text="{Binding IphoneVersion, Converter={StaticResource XMLVersionToStringConverter}}" Visibility="{Binding IsCompIphone, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.Row="2" Style="{StaticResource DefaultTextBoxStyle}"/>
+
+                                        <TextBlock Text="Windows" Visibility="{Binding IsCompWindows, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="0" Grid.Row="3" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                        <TextBox Text="{Binding WindowsVersion, Converter={StaticResource XMLVersionToStringConverter}}" Visibility="{Binding IsCompWindows, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.Column="1" Grid.Row="3" Style="{StaticResource DefaultTextBoxStyle}"/>
+
+                                    </Grid>
+
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1">
+                                    <Button Content="Save" Width="200" Height="50" HorizontalAlignment="Right" Command="{Binding ElementName=AppList, Path=DataContext.CmdSaveApp}" CommandParameter="{Binding}" />
+                                    <Button Content="Remove" Width="200" Height="50" HorizontalAlignment="Left" Command="{Binding ElementName=AppList, Path=DataContext.CmdRemoveApp}" CommandParameter="{Binding}" />
+                                    <Button Content="Cancel" Width="200" Height="50" HorizontalAlignment="Left" Command="{Binding ElementName=AppList, Path=DataContext.CmdCancelEdit}" />
+                                </StackPanel>
                             </Grid>
-                            
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1">
-                            <Button Content="Save" Width="200" Height="50" HorizontalAlignment="Right" Command="{Binding ElementName=AppList, Path=DataContext.CmdSaveApp}" CommandParameter="{Binding}" />
-                            <Button Content="Remove" Width="200" Height="50" HorizontalAlignment="Left" Command="{Binding ElementName=AppList, Path=DataContext.CmdRemoveApp}" CommandParameter="{Binding}" />
-                        </StackPanel>
-                    </Grid>
 
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
+            </Border>
 
-            </StackPanel>
-        </Border>
-
-    </Grid>
+        </Grid>
+    </DockPanel>
 </Window>

@@ -14,32 +14,25 @@ namespace AppCommander.Common.Config
         { 
             get 
             {
-                return System.Configuration.ConfigurationManager.AppSettings["XMLPath"];
+                return Properties.Settings.Default.XMLPath; 
             }
             set 
             {
-                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["XMLPath"].Value = value;
-                config.Save(ConfigurationSaveMode.Modified);
-
-                ConfigurationManager.RefreshSection("appSettings");
+                Properties.Settings.Default.XMLPath = value;
+                Properties.Settings.Default.Save(); 
             }
         }
-
 
         public static string LogDirectory
         {
             get
             {
-                return System.Configuration.ConfigurationManager.AppSettings["LogDirectory"];
+                return Properties.Settings.Default.LogDirectory;
             }
             set
             {
-                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["LogDirectory"].Value = value;
-                config.Save(ConfigurationSaveMode.Modified);
-
-                ConfigurationManager.RefreshSection("appSettings");
+                Properties.Settings.Default.LogDirectory = value;
+                Properties.Settings.Default.Save();
             }
         }
 
@@ -47,15 +40,12 @@ namespace AppCommander.Common.Config
         {
             get
             {
-                return int.Parse(System.Configuration.ConfigurationManager.AppSettings["LogLevel"]);
+                return Properties.Settings.Default.LogLevel;
             }
             set
             {
-                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                config.AppSettings.Settings["LogLevel"].Value = value.ToString();
-                config.Save(ConfigurationSaveMode.Modified);
-
-                ConfigurationManager.RefreshSection("appSettings");
+                Properties.Settings.Default.LogLevel = value;
+                Properties.Settings.Default.Save();
             }
         }
     }

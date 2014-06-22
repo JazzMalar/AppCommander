@@ -16,7 +16,14 @@ namespace AppCommander.Model
         public byte Ranking { get; set; }
         public decimal Price { get; set; }
         public XMLVersion AppVersion { get; set; }
-        public List<ValidPlattform> VPlattform { get; set; }        
+        public XMLVersion AndroidVersion { get; set; }
+        public XMLVersion IphoneVersion { get; set; }
+        public XMLVersion WindowsVersion { get; set; }
+
+        public bool IsCompAndroid { get; set; }
+        public bool IsCompIphone { get; set; }
+        public bool IsCompWindows { get; set; }
+    
         public Appl() { }
 
         public int CompareTo(object obj)
@@ -28,7 +35,7 @@ namespace AppCommander.Model
 
             Appl tmp = obj as Appl;
 
-            return String.Compare(this.GUID, tmp.GUID); 
+            return String.Compare(this.Name, tmp.Name); 
 
         }
 

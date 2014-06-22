@@ -51,8 +51,12 @@ namespace AppCommander.Common.UserControls
 
         private static void RatingValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
+
             RatingControl parent = sender as RatingControl;
             int ratingValue = (int)e.NewValue;
+            if (ratingValue > parent._maxValue) ratingValue = parent._maxValue;
+            if (ratingValue < 0) ratingValue = 0;
+            
             UIElementCollection children = ((Grid)(parent.Content)).Children;
             ToggleButton button = null;
 

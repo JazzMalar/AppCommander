@@ -10,6 +10,7 @@ using AppCommander.Model;
 using AppCommander.Common.Config;
 using System.Threading;
 using System.ComponentModel;
+using System.Windows;
 
 namespace AppCommander.ViewModel
 {
@@ -40,6 +41,20 @@ namespace AppCommander.ViewModel
                 {
                     _selectedApp = value;
                     OnPropertyChanged(); 
+                }
+            }
+        }
+
+        private string _titel;
+        public string Titel
+        {
+            get { return _titel; }
+            set
+            {
+                if (_titel != value)
+                {
+                    _titel = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -85,6 +100,36 @@ namespace AppCommander.ViewModel
 
         #region Commands
 
+        private SimpleCommand _exitApplication;
+        public SimpleCommand CmdExitApplication
+        {
+            get
+            {
+                if (_exitApplication == null) _exitApplication = new SimpleCommand(ExitApplication);
+                return _exitApplication; 
+            }
+        }
+
+        private RelayCommand<string> _savePicture;
+        public RelayCommand<string> CmdSavePicture
+        {
+            get
+            {
+                if (_savePicture == null) _savePicture = new RelayCommand<string>(SavePicture);
+                return _savePicture; 
+            }
+        }
+
+        private SimpleCommand _cancelEdit;
+        public SimpleCommand CmdCancelEdit
+        {
+            get
+            {
+                if (_cancelEdit == null) _cancelEdit = new SimpleCommand(CancelEdit);
+                return _cancelEdit;
+            }
+        }
+
         private SimpleCommand _addApp;
         public SimpleCommand CmdAddApp
         {
@@ -125,23 +170,23 @@ namespace AppCommander.ViewModel
             }
         }
 
-        private RelayCommand<bool> _save;
-        public RelayCommand<bool> CmdSave
+        private SimpleCommand _save;
+        public SimpleCommand CmdSave
         {
             get
             {
-                if (_save == null) _save = new RelayCommand<bool>(Save);
+                if (_save == null) _save = new SimpleCommand(Save);
                 return _save;
             }
         }
 
-        private RelayCommand<bool> _load;
-        public RelayCommand<bool> CmdLoad
+        private SimpleCommand _load;
+        public SimpleCommand CmdLoad
         {
             get
             {
-                if (_load == null) _load = new RelayCommand<bool>(Load);
-                return _load;    
+                if (_load == null) _load = new SimpleCommand(Load);
+                return _load;
             }
         }
 
@@ -160,11 +205,27 @@ namespace AppCommander.ViewModel
 
         #region Command Helpers
 
+        private void ExitApplication()
+        {
+            Application.Current.MainWindow.Close(); 
+        }
+
+        private void SavePicture(string picture)
+        {
+            SelectedApp.Picture = picture;
+            AppList.Remove(SelectedApp);
+            AppList.Add(SelectedApp); 
+        }
+
+        private void CancelEdit()
+        {
+            ChangeView();
+        }
+
         private void AddApp()
         {
-            SelectedApp = new Appl() { GUID = Guid.NewGuid().ToString() }; 
-            IsMainViewActive = false;
-            IsEditViewActive = true; 
+            SelectedApp = new Appl() { GUID = Guid.NewGuid().ToString() };
+            ChangeView();
         }
 
         private void SaveApp(Appl appl)
@@ -176,15 +237,13 @@ namespace AppCommander.ViewModel
             //TODO: Should we really save everytime an app gets changed? 
             Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
 
-            IsEditViewActive = false;
-            IsMainViewActive = true; 
+            ChangeView();
         }
 
         private void SetApp(string GUID) {
 
             SelectedApp = Serializer.DeSerializeByGUID(GUID, ConfigWrapper.XMLPath);
-            IsEditViewActive = true;
-            IsMainViewActive = false;
+            ChangeView();
 
         }
 
@@ -194,18 +253,18 @@ namespace AppCommander.ViewModel
             //TODO: Should we really save everytime an app gets changed? 
             Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
 
-            IsEditViewActive = false;
-            IsMainViewActive = true; 
+            ChangeView();
         }
 
-        private void Save(bool placeholder)
+        private void Save()
         {
-            throw new NotImplementedException(); 
+            Serializer.SerializeToXML<List<Appl>>(AppList.ToList<Appl>(), ConfigWrapper.XMLPath);
         }
 
-        private void Load(bool placeholder)
+        private void Load()
         {
-            throw new NotImplementedException(); 
+            AppList.Clear();
+            Serializer.DeSerializeFromXML<List<Appl>>(ConfigWrapper.XMLPath).ForEach(a => AppList.Add(a));
         }
 
         private void Rate(string ranking)
@@ -216,16 +275,36 @@ namespace AppCommander.ViewModel
 
         #endregion
 
+        #region methods
+        private void ChangeView()
+        {
+            IsEditViewActive = !IsEditViewActive;
+            IsMainViewActive = !IsMainViewActive;
+
+            if (IsMainViewActive) { Titel = "Eingetragene Apps"; }
+            else if (IsEditViewActive) { Titel = "App anpassen"; }
+        }
+        #endregion
 
         /// <summary>
         /// Konstruktor Klasse der MainViewModel
         /// </summary>
         public MainViewModel()
         {
-            Data = new ModelHelper();
+            Titel = "Eingetragene Apps";
+            string loadFrom = ConfigWrapper.XMLPath; 
+
+            if (loadFrom.Equals(String.Empty))
+            {
+                loadFrom = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                loadFrom += @"\\apps.xml";
+                ConfigWrapper.XMLPath = loadFrom;
+
+                this.Save(); 
+            }
 
             // Füge alle Einträge aus dem XML in die AppListe ein
-            Serializer.DeSerializeFromXML<List<Appl>>(ConfigWrapper.XMLPath).ForEach(a => AppList.Add(a));
+            Serializer.DeSerializeFromXML<List<Appl>>(loadFrom).ForEach(a => AppList.Add(a));
 
             IsEditViewActive = false;
             IsMainViewActive = true;

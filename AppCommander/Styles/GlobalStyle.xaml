@@ -13,13 +13,23 @@
     
     <selectors:PersonAreaTemplateSelector x:Key="PersonAreaTemplateSelector" />
     <selectors:MainAreaContentTemplateSelector x:Key="MainAreaContentTemplateSelector" />
+    <selectors:EditImageTemplateSelector x:Key="EditImageTemplateSelector" />
 
     <!-- Main Grid styling -->
     <Style x:Key="RootStyle" TargetType="Grid">
+        <Setter Property="Background" Value="#000000" />
+    </Style>
+    
+    <Style x:Key="MainContentStyle" TargetType="StackPanel">
+        <Setter Property="Background" Value="#646464" />
     </Style>
 
-    <!-- Background Image-->
-    <ImageBrush ImageSource="/AppCommander;component/Common/Assets/Background.PNG" x:Key="BackgroundImage" />
+    <Style x:Key="BorderStyleMain" TargetType="Border">
+        <Setter Property="Margin" Value="5 5 5 5" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="10,10,10,10"/>
+    </Style>
+
     <!-- Style Border -->
     <Style x:Key="BorderStyleProduct" TargetType="Border">
         <Setter Property="Margin" Value="5 5 5 5" />
@@ -82,7 +92,7 @@
         <Setter Property="Margin" Value="5 5 5 5"/>
         <Setter Property="BorderThickness" Value="7"/>
         <Setter Property="CornerRadius" Value="10,10,10,10"/>
-        <Setter Property="Background" Value="#40008800"/>
+        <Setter Property="Background" Value="#979797"/>
     </Style>
 
     <!-- Style AppItemTextBlock -->
@@ -163,13 +173,24 @@
     </ControlTemplate>
 
     <DataTemplate x:Key="AppItemTemplate">
-        <Border Style="{StaticResource BorderAppItem}" BorderBrush="{Binding RGB, Converter={StaticResource RgbToColorBrushConverter}}" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Border Style="{StaticResource BorderAppItem}" BorderBrush="#646464" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Button 
                 Background="Transparent" 
                 Command="{Binding ElementName=AppList, Path=DataContext.CmdSetApp}"
                 CommandParameter="{Binding GUID}">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                    <Image Source="{Binding Picture, Converter={StaticResource NameToImagePathConverter}}" Width="60" Height="120" />
+                    <Image Width="60" Height="120">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Setter Property="Source" Value="{Binding Picture, Converter={StaticResource NameToImagePathConverter}}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Picture}" Value="{x:Null}">
+                                        <Setter Property="Source" Value="/AppCommander;component/Common/Assets/NoImage.PNG" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
                     <TextBlock Text="{Binding Name}" Style="{StaticResource AppItemTextBlock}" />
                     <uc:RatingControl RatingValue="{Binding Ranking, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25" />
                 </StackPanel>

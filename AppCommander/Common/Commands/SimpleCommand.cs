@@ -56,6 +56,11 @@ namespace AppCommander.Common.Commands
             _execute();
         }
 
+        public void Execute()
+        {
+            _execute();
+        }
+
         #endregion // ICommand Members
     }
 }
